@@ -5,6 +5,7 @@ import { JWT } from "next-auth/jwt";
 
 interface ExtendedToken extends JWT {
   accessToken?: string;
+  provider?: string;
 }
 
 const handler = NextAuth({
@@ -23,20 +24,21 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
-        console.log("Account data:", account);
         token.accessToken = account.access_token;
+        token.provider = account.provider;
       }
       return token;
     },
     async session({ session, token }) {
       const extendedToken = token as ExtendedToken;
       session.accessToken = extendedToken.accessToken;
+      if (session.user) {
+        session.user.provider = extendedToken.provider;
+      }
       return session;
     },
     async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
       if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
