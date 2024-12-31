@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Social Login
 
-## Getting Started
+Next.js 14 application with Twitter/X authentication using NextAuth.js.
 
-First, run the development server:
+## Features
+
+- Twitter/X OAuth authentication
+- Session management
+- Responsive design with Tailwind CSS
+- TypeScript support
+
+## Requirements
+
+- Node.js 18+
+- Twitter Developer Account
+- Twitter API Keys (OAuth 1.0a)
+
+## Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create `.env.local`:
+
+```env
+NEXTAUTH_URL=http://localhost:3003
+NEXTAUTH_SECRET=your-secret-key
+
+TWITTER_CLIENT_ID=your-twitter-api-key
+TWITTER_CLIENT_SECRET=your-twitter-api-secret
+```
+
+## Getting the Keys
+
+1. NEXTAUTH_SECRET:
+
+```bash
+openssl rand -base64 32
+```
+
+2. Twitter API Keys:
+
+- Go to [Twitter Developer Portal](https://developer.twitter.com/en/portal/dashboard)
+- Create a new app or select existing
+- Under "Keys and tokens" tab you'll find two types of keys:
+
+### OAuth 1.0a (Used in this project)
+
+- "API Key and Secret" section (as Consumer Keys):
+  - Use "API Key" as TWITTER_CLIENT_ID
+  - Use "API Key Secret" as TWITTER_CLIENT_SECRET
+
+### OAuth 2.0 (Alternative method)
+
+- "OAuth 2.0 Client ID and Client Secret" section:
+  - Client ID starts with letters followed by numbers
+  - Longer Client Secret
+  - Not used in this project as OAuth 1.0a provides better session handling
+
+3. Configure Twitter App:
+
+- Set callback URL: `http://localhost:3003/api/auth/callback/twitter`
+- Enable "Sign in with Twitter"
+- Set up OAuth 1.0a in App Settings
+- Under "App permissions" select "Read and write"
+
+4. Start development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+├── app/
+│   ├── api/auth/
+│   ├── components/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── providers.tsx
+└── types/
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Stack
 
-## Learn More
+- Next.js 14
+- NextAuth.js
+- Tailwind CSS
+- TypeScript
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+MIT
