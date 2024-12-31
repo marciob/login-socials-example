@@ -1,0 +1,6 @@
+NEXTAUTH_URL=http://localhost:3003
+NEXTAUTH_SECRET= 
+
+# Twitter API Keys (OAuth 1.0a Consumer Keys)
+TWITTER_CLIENT_ID=
+TWITTER_CLIENT_SECRET=
