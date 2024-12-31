@@ -7,11 +7,7 @@ const LoginCard = () => {
   const { data: session } = useSession();
 
   const handleLogin = async (provider: "google" | "twitter") => {
-    if (provider === "twitter") {
-      await signIn("twitter", { callbackUrl: "/" });
-    } else {
-      console.log(`Logging in with ${provider}`);
-    }
+    await signIn(provider, { callbackUrl: "/" });
   };
 
   return (

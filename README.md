@@ -1,10 +1,11 @@
 # Next.js Social Login
 
-Next.js 14 application with Twitter/X authentication using NextAuth.js.
+Next.js 14 application with Twitter/X and Google authentication using NextAuth.js.
 
 ## Features
 
 - Twitter/X OAuth authentication
+- Google OAuth authentication
 - Session management
 - Responsive design with Tailwind CSS
 - TypeScript support
@@ -13,7 +14,7 @@ Next.js 14 application with Twitter/X authentication using NextAuth.js.
 
 - Node.js 18+
 - Twitter Developer Account
-- Twitter API Keys (OAuth 1.0a)
+- Google Cloud Console Account
 
 ## Setup
 
@@ -23,57 +24,87 @@ Next.js 14 application with Twitter/X authentication using NextAuth.js.
 npm install
 ```
 
-2. Create `.env.local`:
-
-```env
-NEXTAUTH_URL=http://localhost:3003
-NEXTAUTH_SECRET=your-secret-key
-
-TWITTER_CLIENT_ID=your-twitter-api-key
-TWITTER_CLIENT_SECRET=your-twitter-api-secret
-```
-
-## Getting the Keys
-
-1. NEXTAUTH_SECRET:
+2. Generate NEXTAUTH_SECRET:
 
 ```bash
 openssl rand -base64 32
 ```
 
-2. Twitter API Keys:
+3. Create `.env.local`:
 
-- Go to [Twitter Developer Portal](https://developer.twitter.com/en/portal/dashboard)
-- Create a new app or select existing
-- Under "Keys and tokens" tab you'll find two types of keys:
+```env
+NEXTAUTH_URL=http://localhost:3003
+NEXTAUTH_SECRET=your-generated-secret
 
-### OAuth 1.0a (Used in this project)
+# Twitter Keys (OAuth 1.0a)
+TWITTER_CLIENT_ID=your-twitter-api-key
+TWITTER_CLIENT_SECRET=your-twitter-api-secret
 
-- "API Key and Secret" section (as Consumer Keys):
-  - Use "API Key" as TWITTER_CLIENT_ID
-  - Use "API Key Secret" as TWITTER_CLIENT_SECRET
+# Google OAuth
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
 
-### OAuth 2.0 (Alternative method)
+## Getting API Keys
 
-- "OAuth 2.0 Client ID and Client Secret" section:
-  - Client ID starts with letters followed by numbers
-  - Longer Client Secret
-  - Not used in this project as OAuth 1.0a provides better session handling
+### 1. Google OAuth Setup
 
-3. Configure Twitter App:
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable Google OAuth:
+   - Go to "APIs & Services" > "OAuth consent screen"
+   - Choose "External" user type
+   - Fill in app name and required fields
+   - Add test users if needed
+4. Create credentials:
+   - Go to "APIs & Services" > "Credentials"
+   - Click "Create Credentials" > "OAuth client ID"
+   - Choose "Web application"
+   - Add authorized JavaScript origins:
+     ```
+     http://localhost:3003
+     ```
+   - Add authorized redirect URI:
+     ```
+     http://localhost:3003/api/auth/callback/google
+     ```
+   - Click "Create"
+5. Copy credentials:
+   - Use "Client ID" as GOOGLE_CLIENT_ID
+   - Use "Client Secret" as GOOGLE_CLIENT_SECRET
 
-- Set callback URL: `http://localhost:3003/api/auth/callback/twitter`
-- Enable "Sign in with Twitter"
-- Set up OAuth 1.0a in App Settings
-- Under "App permissions" select "Read and write"
+### 2. Twitter OAuth Setup
 
-4. Start development server:
+1. Go to [Twitter Developer Portal](https://developer.twitter.com/en/portal/dashboard)
+2. Create a new app or select existing
+3. Setup OAuth 1.0a:
+   - Go to app settings
+   - Enable "OAuth 1.0a"
+   - Set app permissions to "Read and write"
+   - Add callback URL:
+     ```
+     http://localhost:3003/api/auth/callback/twitter
+     ```
+   - Enable "Request email from users"
+4. Get API Keys:
+   - Go to "Keys and tokens" tab
+   - Under "Consumer Keys" section (OAuth 1.0a):
+     - Use "API Key" as TWITTER_CLIENT_ID
+     - Use "API Key Secret" as TWITTER_CLIENT_SECRET
+
+Note: Do not use OAuth 2.0 keys for Twitter. This project uses OAuth 1.0a for better session handling.
+
+## Running the App
+
+Start development server:
 
 ```bash
 npm run dev
 ```
 
-## Structure
+Visit `http://localhost:3003`
+
+## Project Structure
 
 ```
 ├── app/
